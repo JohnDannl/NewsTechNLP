@@ -15,6 +15,7 @@ import time
 import json
 
 from newslsa import lsa2sim
+from newslda import lda2sim
 from newsesa import esa2sim
 from newsw2v import w2v2sim
 
@@ -54,19 +55,23 @@ def process_query(sock,addr):
 #         return
     wordList=data.split()
     lsa_sim=lsa2sim.getSimNews(wordList)
+    lda_sim=lda2sim.getSimNews(wordList)
     esa_sim=esa2sim.getSimNews(wordList)
     w2v_sim=w2v2sim.getSimNews(wordList)
     sims={}
     lsa_list=[]
     for indx,sim in lsa_sim:
         lsa_list.append((int(indx),sim))
+    lda_list=[]
+    for indx,sim in lda_sim:
+        lda_list.append((int(indx),sim))
     esa_list=[]
     for indx,sim in esa_sim:
         esa_list.append((int(indx),sim))
     w2v_list=[]
     for indx,sim in w2v_sim:
         w2v_list.append((int(indx),sim))
-    sims['lsa'],sims['esa'],sims['w2v']=lsa_list,esa_list,w2v_list
+    sims={'lsa':lsa_list,'lda':lda_list,'esa':esa_list,'w2v':w2v_list}
     resultStr= json.dumps(sims)    
     #print 'reply:',resultStr
     sock.sendall(resultStr)

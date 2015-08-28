@@ -18,7 +18,7 @@ oldtime=time.time()
 model = Word2Vec.load(w2v_md_file)
 model.init_sims(replace=True)
 
-def statistic_vacab():
+def statistic_vacancy():
     for line in open(news_file):
         empty=True
         for word in line.split()[1:]:
@@ -28,7 +28,7 @@ def statistic_vacab():
                 break
         if empty:
             print line
-    
+   
 def _get_concept_vec_prune(wordList):
     # wordList is a list of word:[word1,word2,...,wordn]
     total_vec=scipy.zeros(model.layer1_size)
@@ -48,7 +48,7 @@ class MyCorpus(object):
 #             yield _get_concept_vec_slope(line[1:])
             yield _get_concept_vec_prune(line[1:])
 
-# statistic_vacab()        
+# statistic_vacancy()        
 corpora.MmCorpus.serialize(w2v_mm_file, MyCorpus(news_file)) # store to disk, for later use
 print _get_concept_vec_prune(['中国'])
 print np.linalg.norm(model['中国'])

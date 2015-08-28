@@ -8,14 +8,7 @@ Created on 2014-12-27
 
 w2v_md_file=r'/home/dannl/tmp/wiki/w2v/w2v.md'
 
-########################################## For news
-# news_file=r'e:/tmp/news/news.txt'
-# w2v_mm_file=r'e:/tmp/news/w2v/news.mm'
-# index_prefix=r'e:/tmp/news/w2v/index'
-# index_file=r'e:/tmp/news/w2v/news.index'
-# affinity_array_file='e:/tmp/news/w2v/news_aff.npy'
-# ave_dis_mat_file='e:/tmp/news/w2v/news_ave_dis.npy'
-# cos_dis_mat_file='e:/tmp/news/w2v/news_cos_dis.npy'
+# w2v_md_file=r'/home/dannl/tmp/news/w2v/w2v.md'
 
 ########################################### For newstech
 news_file=r'/home/dannl/tmp/newstech/news.txt'

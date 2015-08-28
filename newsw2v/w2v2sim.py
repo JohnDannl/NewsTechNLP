@@ -21,7 +21,7 @@ model = Word2Vec.load(w2v_md_file)
 model.init_sims(replace=True)   # To save memory
 index = similarities.Similarity.load(index_file)
 
-def _get_concept_vec_prune(wordList):
+def _get_concept_vec(wordList):
     # wordList is a list of word:[word1,word2,...,wordn]
     total_vec=scipy.zeros(model.layer1_size)
     wordStr=' '.join(wordList)
@@ -48,7 +48,7 @@ def _get_concept_vec_prune(wordList):
 corpus_w2v=corpora.MmCorpus(w2v_mm_file)
 
 def getSimNews(wordList):
-    vec_w2v=_get_concept_vec_prune(wordList)
+    vec_w2v=_get_concept_vec(wordList)
     return index[vec_w2v]
 
 def printSimNews(num):
@@ -65,6 +65,6 @@ if __name__=='__main__':
     oldtime=time.time()
 #     printSimNews(28)
     newStr='最高法：网购快递被冒领应由销售者赔偿 快递公司不担责'
-    wordList=jieba.cut(delpunc(newStr.lower()))# make sure is a utf-8 str  
+    wordList=delpunc(' '.join(jieba.cut(newStr.lower()))).split()# make sure is a utf-8 str  
     printSimNewsByStr(wordList)
     print 'time cost:%s' % str(time.time()-oldtime)

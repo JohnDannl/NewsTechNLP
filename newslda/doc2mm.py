@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 '''
-Created on 2015-7-16
+Created on 2015-8-26
 
 @author: dannl
 '''
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import news_file,dict_file,tfidf_md_file,lsa_mm_file,lsa_md_file,index_file,index_prefix
+from config import news_file,dict_file,tfidf_md_file,corpus_lda_file,lda_md_file
 import time
 oldtime=time.time()
 
@@ -35,28 +35,26 @@ def statistic_vacancy():
 
 # statistic_vacancy()
 
-tfidf=models.TfidfModel.load(tfidf_md_file)
-corpus_tfidf=tfidf[corpus_memory_friendly]
+# lda=models.LdaModel(corpus_memory_friendly,num_topics=100,id2word=dictionary,chunksize=10000, passes=1, update_every=1)# initialize an LSI transformation
+lda=models.LdaModel.load(lda_md_file)
+corpus_lda=lda[corpus_memory_friendly]
+corpora.MmCorpus.serialize(corpus_lda_file, corpus_lda) # store to disk, for later use
 
-lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=100) # initialize an LSI transformation
-lsi.save(lsa_md_file)
-corpus_lsi = lsi[corpus_tfidf] # create a double wrapper over the original corpus: bow->tfidf->fold-in-lsi
-# lsi=models.LsiModel.load(lsa_md_file)
-# corpus_lsi=lsi[tfidf[corpus_memory_friendly]]
-corpora.MmCorpus.serialize(lsa_mm_file, corpus_lsi) # store to disk, for later use
+# lda=models.LdaModel.load(lda_md_file)
+# corpus_lda = corpora.MmCorpus(corpus_lda_file)
+# lda.print_topics(2) # see what these two latent dimensions stand for
+# print corpus_lda[0]
 
-# corpus_lsi = corpora.MmCorpus(corpus_lsi_file)
-# lsi.print_topics(2) # see what these two latent dimensions stand for
-# print corpus_lsi[0]
+# print sum(x for i,x in corpus_lda[0])
+
 # count=0
-# for doc in corpus_memory_friendly: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
+# for doc in corpus_lda: # both bow->tfidf and tfidf->lsi transformations are actually executed here, on the fly
 #     count+=1
 #     if count>10:
 #         break
 #     print count,doc
-#     print count,tfidf[doc]    
+    
+# lda.save(lda_md_file) # same for tfidf, lda, ...
+# lda = models.LsiModel.load('./tmp/model.lsi')
 
-# lsi.save(lsi_file) # same for tfidf, lda, ...
-# lsi = models.LsiModel.load('./tmp/model.lsi')
-
-print 'time cost:%s' % str(time.time()-oldtime)
+print 'time cost:%.2f' % (time.time()-oldtime,)
