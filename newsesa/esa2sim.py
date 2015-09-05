@@ -8,7 +8,7 @@ Created on 2015-1-20
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import dict_file,word2docp_mm_file,word2docp2_mm_file,tfidf_md_file,news_file,full_index_file,\
+from config import dict_file,word2docp_mm_file,tfidf_md_file,news_file,full_index_file,\
 esa_mm_file
 
 import jieba
@@ -113,9 +113,9 @@ def _get_concept_vec(wordList):
 corpus_esa=corpora.MmCorpus(esa_mm_file)
 
 def getSimNews(wordList):
-#     vec_esa=_get_concept_vec(wordList)
+    vec_esa=_get_concept_vec(wordList)
 #     vec_esa=_get_concept_vec_prune(wordList)
-    vec_esa=_get_concept_vec_slope(wordList)
+#     vec_esa=_get_concept_vec_slope(wordList)
     return index[vec_esa]
 
 def printSimNews(num):

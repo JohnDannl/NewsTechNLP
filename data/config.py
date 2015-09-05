@@ -11,3 +11,4 @@ merge2_title_file='/home/dannl/tmp/newstech/data/merge2_title'
 merge2_summary_file='/home/dannl/tmp/newstech/data/merge2_summary'
 
 news_file='/home/dannl/tmp/newstech/news.txt'
+summary_file='/home/dannl/tmp/newstech/summary.txt'
