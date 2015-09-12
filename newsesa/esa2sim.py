@@ -127,7 +127,19 @@ def printSimNewsByStr(wordList):
     corpus=list(open(news_file,'r'))
     for snum,sim in getSimNews(wordList):
         print sim,corpus[snum],
-
+        
+def getSimNewsId():
+    news_rep_pre_file='/home/dannl/tmp/newstech/db1/title_rep'
+    sim_mtid_file='/home/dannl/tmp/newstech/esa_sw/sim_mtid'
+    corpus=list(open(news_file,'r'))
+    rep_title=open(news_rep_pre_file,'r')
+    fout=open(sim_mtid_file,'w')
+    for line in rep_title:
+        lineno=int(line.split()[0])-1
+        for snum,sim in index[corpus_esa[lineno]]:
+            print >> fout,corpus[snum].split()[0],
+        print >>fout  
+        
 if __name__=='__main__':    
     oldtime=time.time()
 #     printSimNews(28)
@@ -137,4 +149,5 @@ if __name__=='__main__':
 #     wordList='揭秘 王卫 顺丰 快递 员 为啥 拼命 给 他 打天下'.decode('utf-8').split()
 #     for word in wordList:
 #         print word,dictionary.token2id[word],len(word2doc_mat[dictionary.token2id[word]])
+    getSimNewsId()
     print 'time cost:%s' % str(time.time()-oldtime)

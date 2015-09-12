@@ -35,7 +35,19 @@ def printSimNewsByStr(wordList):
     corpus=list(open(news_file,'r'))
     for snum,sim in getSimNews(wordList):
         print sim,corpus[snum],
-
+        
+def getSimNewsId():
+    news_rep_pre_file='/home/dannl/tmp/newstech/db1/title_rep'
+    sim_mtid_file='/home/dannl/tmp/newstech/lsa/sim_mtid'
+    corpus=list(open(news_file,'r'))
+    rep_title=open(news_rep_pre_file,'r')
+    fout=open(sim_mtid_file,'w')
+    for line in rep_title:
+        lineno=int(line.split()[0])-1
+        for snum,sim in index[corpus_lsi[lineno]]:
+            print >> fout,corpus[snum].split()[0],
+        print >>fout  
+        
 if __name__=='__main__':
     oldtime=time.time()
 #     printSimNews(28)
@@ -43,6 +55,7 @@ if __name__=='__main__':
     newStr='最高法：网购快递被冒领应由销售者赔偿 快递公司不担责'
     wordList=jieba.cut(delpunc(newStr.lower()));    
     printSimNewsByStr(wordList)
+    getSimNewsId()
     print 'time cost:%s' % str(time.time()-oldtime)
 
 

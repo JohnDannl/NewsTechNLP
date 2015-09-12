@@ -18,3 +18,4 @@ lsa_mm_file='/home/dannl/tmp/newstech/lsa/lsa.mm'
 lsa_md_file='/home/dannl/tmp/newstech/lsa/lsa.md'
 index_file='/home/dannl/tmp/newstech/lsa/lsa.index'
 index_prefix='/home/dannl/tmp/newstech/lsa/index'
+

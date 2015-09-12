@@ -17,6 +17,7 @@ import jieba
 from common.punckit import delpunc
 from config import w2v_md_file,news_file,tfidf_md_file,dict_file,word_sim_dict_file
 import json
+import math
 
 model = Word2Vec.load(w2v_md_file)
 model.init_sims(replace=True) # To load a static model to save memory
@@ -103,8 +104,7 @@ class Entry(object):
         return (not self.__eq__(other))
     def __hash__(self):
         return hash(self.__repr__())
-threshold=0.801
-delta=0.001
+threshold=0.8
 class WordSimDict():
     def __init__(self,dict_file):
         self._file=dict_file
@@ -145,13 +145,13 @@ class WordSimDict():
         for entry in discard:
             entry_set.discard(entry)
         len_new=len(entry_set)
-        print 'old:%d,new:%d'%(len_ori,len_new)
+        #print 'old:%d,new:%d'%(len_ori,len_new)
         percent=(threshold-sim_ave)*len_ori/(sim_ave*len_new)         
         for entry in entry_set:
             new_sim=entry.sim*(1+percent)
             if new_sim>1.0:
                 new_sim=1.0
-            new_sim=round(new_sim,7)
+            new_sim=math.ceil(new_sim*1e7)/1e7
             key1=('%s::%s'%(entry.w1,entry.w2)).decode('utf-8')
             key2=('%s::%s'%(entry.w2,entry.w1)).decode('utf-8')
             if key1 in self.dict and self.dict[key1]>new_sim:
@@ -174,20 +174,24 @@ class WordSimDict():
             
 word_sim_dic=WordSimDict(word_sim_dict_file)
 
-def getSimofWordListPairMod(wl1,wl2,modify=False):
+def getSimofWordListPairMod(wordList1,wordList2,modify=False,usrDict=False):
     # two word lists should better be utf-8
     entries=[]
-    wordStr=' '.join(wl1)
+    wordStr=' '.join(wordList1)
     if isinstance(wordStr,unicode): # make sure word is utf-8 str type
         wl1=wordStr.encode('utf-8').split()
-    wordStr=' '.join(wl2)
+    else:
+        wl1=wordStr.split()
+    wordStr=' '.join(wordList2)
     if isinstance(wordStr,unicode): # make sure word is utf-8 str type
         wl2=wordStr.encode('utf-8').split()      
-    len1,len2=len(wl1),len(wl2)     
+    else:
+        wl2=wordStr.split()
+    len1,len2=len(wl1),len(wl2)  
     asim=np.zeros((len1,len2))
     for i in xrange(len1):
         for j in xrange(len2):
-            asim[i][j]=getSimofWords(wl1[i], wl2[j],modify) 
+            asim[i][j]=getSimofWords(wl1[i], wl2[j],usrDict) 
     sim_sum=0.0    
     while 0 not in np.shape(asim):
         i,j=np.unravel_index(asim.argmax(), asim.shape)
@@ -200,13 +204,13 @@ def getSimofWordListPairMod(wl1,wl2,modify=False):
         asim=np.delete(asim, j, 1)          
 #     for entry in entries:
 #         print entry.w1,entry.w2,entry.sim
-    minlen=len1 if len1<=len2 else len2
+    minlen=len1 if len1<=len2 else len2    
     sim_ave=sim_sum/minlen
-    if modify and sim_ave<threshold-delta:
+    if modify and sim_ave<threshold:
         word_sim_dic.update_dict(sim_ave, entries)
     return sim_ave
 
-def getSimofWordListTopMod(wl1,wl2,modify=False):
+def getSimofWordListTopMod(wl1,wl2,modify=False,usrDict=False):
     # two word lists should better be utf-8
     entries=[]
     wordStr=' '.join(wl1)
@@ -221,7 +225,7 @@ def getSimofWordListTopMod(wl1,wl2,modify=False):
     for i in xrange(len1):
         sim_max,max_j=0.0,0
         for j in xrange(len2):
-            sim_cur=getSimofWords(wl1[i], wl2[j],modify) 
+            sim_cur=getSimofWords(wl1[i], wl2[j],usrDict) 
             sim_arr[i][j]=sim_cur            
             if sim_cur>sim_max:
                 sim_max=sim_cur
@@ -239,7 +243,7 @@ def getSimofWordListTopMod(wl1,wl2,modify=False):
 #     for entry in entries:
 #         print entry.w1,entry.w2,entry.sim
     sim_ave=sim_sum/(len1+len2)
-    if modify and sim_ave<threshold-delta:
+    if modify and sim_ave<threshold:
         word_sim_dic.update_dict(sim_ave, entries)
     return sim_ave
 
@@ -315,12 +319,13 @@ if __name__ =='__main__':
 #     vec0+=model['中国']
     #print vec0
 #     print norm(vec0)
-    news1='最高法：包裹冒领应由网店赔偿'
+    news1='最高法：包裹冒领应由网店赔偿 | 爱范早读'
 #     news2='最高法：包裹冒领应由网店赔偿 | 爱范早读'
     news2='网购快递被冒领怎么办？最高法：卖家全赔'    
-    getSimofSens(news1,news2,True) 
-    getSimofSens(news1,news1,True) 
+    getSimofSens(news1,news2,False) 
+    getSimofSens(news1,news1,False) 
     word_sim_dic.save_dict()    
+    print getSimofWords('乐逗', '陌陌', userDict=True)
 #     print word_sim_dic.similarity('卖家', '网店')
 #     print word_sim_dic.has_vocab('卖家', '网店')
 #     print dictionary.dfs[dictionary.token2id[u'包裹']]
