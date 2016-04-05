@@ -9,11 +9,11 @@ news_file='/home/dannl/tmp/newstech/news.txt'
 summary_file='/home/dannl/tmp/newstech/summary.txt'
 
 ###### use wiki dict
-# dict_file='/home/dannl/tmp/wiki/lsa/wiki.dic'
+# dic_file='/home/dannl/tmp/wiki/lsa/wiki.dic'
 # tfidf_md_file='/home/dannl/tmp/wiki/lsa/tfidf.md'
 
 ###### use news_wiki dict
-dict_file='/home/dannl/tmp/news/news_wiki/news_wiki.dic'
+dic_file='/home/dannl/tmp/news/news_wiki/news_wiki.dic'
 tfidf_md_file='/home/dannl/tmp/news/news_wiki/tfidf.md'
 
 lsa_mm_file='/home/dannl/tmp/newstech/slsa/lsa.mm'

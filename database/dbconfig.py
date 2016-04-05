@@ -16,12 +16,13 @@ host = 'localhost'
 
 password = 'ustcedu10'
 
+# remove bianews,able2do
 tableName={'sina':'sina','sohu':'sohu','w163':'w163','huxiu':'huxiu','ittime':'ittime',
-           'bianews':'bianews','w36kr':'w36kr','leiphone':'leiphone','ifanr':'ifanr','zol':'zol',
-           'tmt':'tmt','alibuybuy':'alibuybuy','csdn':'csdn','ciweek':'ciweek','geekpark':'geekpark',
-           'donews':'donews','zhidx':'zhidx','techweb':'techweb','bnet':'bnet','cnet':'cnet',
-           'techcrunch':'techcrunch','technews':'technews','zdnet':'zdnet','pingwest':'pingwest','pintu360':'pintu360',
-           'hiapk':'hiapk','able2do':'able2do','qq':'qq'}
+           'w36kr':'w36kr','leiphone':'leiphone','ifanr':'ifanr','zol':'zol','tmt':'tmt',
+           'csdn':'csdn','ciweek':'ciweek','geekpark':'geekpark','donews':'donews','zhidx':'zhidx',
+           'techweb':'techweb','bnet':'bnet','cnet':'cnet','techcrunch':'techcrunch','technews':'technews',
+           'zdnet':'zdnet','pingwest':'pingwest','pintu360':'pintu360','hiapk':'hiapk','qq':'qq',
+           'feng':'feng',}
 
 mergetable='merge'
 mergetable2='merge2'

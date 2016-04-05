@@ -8,7 +8,7 @@ Created on 2015-1-23
 
 ####### For semantic server ###########
 host='localhost'               # Symbolic name meaning all available interfaces
-port = 8898              # Arbitrary non-privileged port
+port = 8893              # Arbitrary non-privileged port
 
 ####### For removing duplicates #############
 rep_file='/home/dannl/tmp/newstech/db1/title_rep'

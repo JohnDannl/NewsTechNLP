@@ -8,7 +8,7 @@ Created on 2015-8-26
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import news_file,dict_file,tfidf_md_file,corpus_lda_file,lda_md_file,index_file,index_prefix
+from config import news_file,dic_file,tfidf_md_file,corpus_lda_file,lda_md_file,index_file,index_prefix
 import time
 oldtime=time.time()
 

@@ -10,8 +10,8 @@ def InsertItem(tablename, data):
     if ChkExistRow(tablename, data[2]):
         return
     query = """INSERT INTO """ + tablename + """(
-               url,title,newsid,thumb,summary,keywords,ctime,commentid,type,source,wapurl,img)
-               values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+               url,title,newsid,thumb,summary,keywords,ctime,source,author,description)
+               values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     dbconn.Insert(query, data)
 
 def InsertItemMany(tablename, datas):
@@ -20,17 +20,17 @@ def InsertItemMany(tablename, datas):
 
 def InsertItems(tablename, datas):
     query = """INSERT INTO """ + tablename + """(
-               url,title,newsid,thumb,summary,keywords,ctime,commentid,type,source,wapurl,img)
-               values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+               url,title,newsid,thumb,summary,keywords,ctime,source,author,description)
+               values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     dbconn.insertMany(query, datas)
 
 def InsertItemDict(tablename, data):
     if ChkExistRow(tablename, data['newsid']):
         return 1
     query = "INSERT INTO " + tablename + """(
-             url,title,newsid,thumb,summary,keywords,ctime,commentid,type,source,wapurl,img) 
+             url,title,newsid,thumb,summary,keywords,ctime,source,author,description) 
              values(%(url)s, %(title)s,%(newsid)s, %(thumb)s, %(summary)s, %(keywords)s,%(ctime)s, 
-             %(commentid)s, %(type)s, %(source)s, %(wapurl)s, %(img)s)"""
+             %(source)s, %(author)s, %(description)s)"""
     dbconn.Insert(query, data)
     return 0
 def getAllCount(tablename):
@@ -59,9 +59,9 @@ def getBriefRecordsBiggerId(tablename,tid):
     rows = dbconn.Select(query, (tid,))
     return rows
 
-def getRecordsById(tablename,tid):
+def getRecordsById(tablename,webid):
     query = "SELECT * FROM " + tablename+' where id = %s'
-    rows = dbconn.Select(query, (tid,))
+    rows = dbconn.Select(query, (webid,))
     return rows
 
 def getRecordsByCtime(tablename, starttime, endtime):
@@ -133,20 +133,20 @@ def ChkExistRow(tablename, newsid):
     return True
                 
 def CreateNewsTable(tablename):
+    # for mysql text has a length 2^16 bytes limit,for postgresql text is unlimited
+    # and for postgresql there is no performance effect among char(n),varchar(n),text
     query = """CREATE TABLE """ + tablename + """(
                id serial primary key, 
-               url varchar(4096),   
+               url varchar(2048),   
                title varchar(512),           
-               newsid varchar(1024),                              
-               thumb varchar(4096),
-               summary varchar(10240),
+               newsid varchar(255),                              
+               thumb varchar(2048),
+               summary text,
                keywords varchar(512),  
-               ctime bigint, 
-               commentid varchar(4096),            
-               type varchar(255),
+               ctime bigint,         
                source varchar(255),
-               wapurl varchar(4096),
-               img varchar(4096))"""
+               author varchar(255),
+               description text)"""
     dbconn.CreateTable(query, tablename)
     dbconn.CreateIndex('create index on %s (newsid)'%tablename)
     dbconn.CreateIndex('create index on %s (ctime)'%tablename)
@@ -158,9 +158,9 @@ def ReIndex(tablename):
         print 'Failure:reindex %s'%tablename
     
 if __name__ == "__main__":
-    CreateNewsTable(dbconfig.tableName['qq'])
-#     for tablename in dbconfig.tableName.itervalues():
-#         CreateNewsTable(tablename)
+#     CreateNewsTable(dbconfig.tableName['feng'])
+    for tablename in dbconfig.tableName.itervalues():
+        CreateNewsTable(tablename)
     
 #     rows=getTopETBVRecords(dbconfig.tableName[2],'2014-09-04 10:09:02','1310457')
 #     if rows !=-1:

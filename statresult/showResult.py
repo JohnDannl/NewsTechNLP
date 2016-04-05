@@ -9,6 +9,7 @@ rep_id_file='/home/dannl/tmp/newstech/db1/title_rep_id'
 w2v_simtid_file='/home/dannl/tmp/newstech/w2v/sim_mtid'
 esa_simtid_file='/home/dannl/tmp/newstech/esa_sw/sim_mtid'
 lsa_simtid_file='/home/dannl/tmp/newstech/lsa/sim_mtid'
+usrdic_simtid_file='/home/dannl/tmp/newstech/usrdic/sim_mtid'
 
 def _get_precise_recall_f1score(stand_set,comp_set):
     _cnt,com_cnt=0.0,0.0
@@ -39,8 +40,13 @@ def get_precise_recall_f1score(stand_file,comp_files):
                 comp_set.add((_mtid,line[0]))
     return _get_precise_recall_f1score(stand_set,comp_set)
 
+print get_precise_recall_f1score(rep_id_file,[lsa_simtid_file,])
+print get_precise_recall_f1score(rep_id_file,[esa_simtid_file,])
+print get_precise_recall_f1score(rep_id_file,[w2v_simtid_file,])
+print get_precise_recall_f1score(rep_id_file,[usrdic_simtid_file,])
 print get_precise_recall_f1score(rep_id_file,[lsa_simtid_file,esa_simtid_file])
+print get_precise_recall_f1score(rep_id_file,[lsa_simtid_file,w2v_simtid_file])
 print get_precise_recall_f1score(rep_id_file,[esa_simtid_file,w2v_simtid_file])
-print get_precise_recall_f1score(rep_id_file,[w2v_simtid_file,lsa_simtid_file])
+print get_precise_recall_f1score(rep_id_file,[w2v_simtid_file,lsa_simtid_file,esa_simtid_file])
 
         

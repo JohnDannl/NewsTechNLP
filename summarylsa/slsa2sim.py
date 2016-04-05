@@ -9,13 +9,13 @@ import logging
 from Crypto.Util.RFC1751 import wordlist
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import news_file,summary_file,dict_file,tfidf_md_file,lsa_mm_file,lsa_md_file,index_file,index_prefix
+from config import news_file,summary_file,dic_file,tfidf_md_file,lsa_mm_file,lsa_md_file,index_file,index_prefix
 import time
 import jieba
 import copy
 from common.punckit import delpunc
 
-dictionary = corpora.Dictionary.load(dict_file)
+dictionary = corpora.Dictionary.load(dic_file)
 tfidf = models.TfidfModel.load(tfidf_md_file) # step 1 -- initialize a model
 lsi=models.LsiModel.load(lsa_md_file)
 corpus_lsi= corpora.MmCorpus(lsa_mm_file)

@@ -9,13 +9,13 @@ import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
 from gensim.models.word2vec import Word2Vec
-from config import w2v_mm_file,w2v_md_file,news_file
+from config import cbow_mm_file,cbow_md_file,news_file
 import time
 import scipy
 import numpy as np
 oldtime=time.time()
 
-model = Word2Vec.load(w2v_md_file)
+model = Word2Vec.load(cbow_md_file)
 model.init_sims(replace=True)
 
 def statistic_vacancy():
@@ -49,7 +49,7 @@ class MyCorpus(object):
             yield _get_concept_vec(line[1:])
 
 # statistic_vacancy()        
-corpora.MmCorpus.serialize(w2v_mm_file, MyCorpus(news_file)) # store to disk, for later use
+corpora.MmCorpus.serialize(cbow_mm_file, MyCorpus(news_file)) # store to disk, for later use
 print _get_concept_vec(['中国'])
 print np.linalg.norm(model['中国'])
 

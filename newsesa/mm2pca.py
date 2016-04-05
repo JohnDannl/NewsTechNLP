@@ -8,11 +8,11 @@ Created on 2015-3-16
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models
-from config import dict_file,esa_mm_file,tfidf_md_file,esa_pca_mm_file,esa_pca_md_file
+from config import dic_file,esa_mm_file,tfidf_md_file,esa_pca_mm_file,esa_pca_md_file
 import time
 oldtime=time.time()
 
-dictionary = corpora.Dictionary.load(dict_file)
+dictionary = corpora.Dictionary.load(dic_file)
 corpus_esa = corpora.MmCorpus(esa_mm_file)
 # tfidf =models.TfidfModel.load(tfidf_md_file)
 # corpus_tfidf = tfidf[corpus]

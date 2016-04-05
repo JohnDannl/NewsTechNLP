@@ -8,11 +8,11 @@ Created on 2015-8-26
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import news_file,dict_file,tfidf_md_file,corpus_lda_file,lda_md_file
+from config import news_file,dic_file,tfidf_md_file,corpus_lda_file,lda_md_file
 import time
 oldtime=time.time()
 
-dictionary = corpora.Dictionary.load(dict_file)
+dictionary = corpora.Dictionary.load(dic_file)
 class MyCorpus(object):
     def __iter__(self):
         for line in open(news_file):

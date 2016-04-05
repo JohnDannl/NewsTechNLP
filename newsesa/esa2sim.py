@@ -8,15 +8,18 @@ Created on 2015-1-20
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import dict_file,word2docp_mm_file,tfidf_md_file,news_file,full_index_file,\
+from config import dic_file,word2docp_mm_file,tfidf_md_file,news_file,full_index_file,\
 esa_mm_file
 
 import jieba
 from database import tablemerge,dbconfig
 from common.punckit import delpunc
 import time
+from six import iteritems
+from numpy.linalg import norm
+import numpy as np
 
-dictionary = corpora.Dictionary.load(dict_file)
+dictionary = corpora.Dictionary.load(dic_file)
 # print corpus # MmCorpus(3026 documents, 8950 features, 22702 non-zero entries)
 tfidf=models.TfidfModel.load(tfidf_md_file)
 word2doc_mat=corpora.MmCorpus(word2docp_mm_file)    # `mm` document stream now has random access
@@ -37,7 +40,7 @@ def _get_concept_vec_prune(wordList,prune_at=0.2):
             dic_tfidf[docid]=value
     #print 'tfidf:',vec_tfidf
     #print 'bow:',vec_bow
-    if not dic_tfidf.values():        
+    if len(dic_tfidf)==0:        
         print 'Document not recruited:',' '.join(wordList)
     limit_low=prune_at*max(dic_tfidf.iteritems(),key=lambda i:i[1])[1]
     concept_vec=[]
@@ -60,7 +63,7 @@ def _get_concept_vec_slope(wordList,slope=0.05):
             dic_tfidf[docid]=value
     #print 'tfidf:',vec_tfidf
     #print 'bow:',vec_bow
-    if not dic_tfidf.values():        
+    if len(dic_tfidf)==0:        
         print 'Document not recruited:',' '.join(wordList)        
     pvec=[]
     __window_size=100
@@ -93,10 +96,42 @@ def _get_concept_vec(wordList):
             dic_tfidf[docid]=value
     #print 'tfidf:',vec_tfidf
     #print 'bow:',vec_bow
-    if not dic_tfidf.values():        
+    if not len(dic_tfidf):        
         print 'Document not recruited:',' '.join(wordList)    
     return list(dic_tfidf.iteritems())
 
+def _get_dic_vec(wordList):
+    dic_tfidf={}
+    vec_bow = dictionary.doc2bow(wordList)
+    vec_tfidf=tfidf[vec_bow]
+#     for wordid,tfidf_v in vec_bow:
+    for wordid,tfidf_v in vec_tfidf:    
+        for docid,weight in word2doc_mat[wordid]:
+            value=dic_tfidf.get(docid,0)
+            value+=tfidf_v*weight
+            dic_tfidf[docid]=value
+    #print 'tfidf:',vec_tfidf
+    #print 'bow:',vec_bow
+    if len(dic_tfidf)==0:        
+        print 'Document not recruited:',' '.join(wordList)
+    return dic_tfidf
+
+def _dot_product(dic1,dic2):
+    if len(dic1)>len(dic2): # select the shorter one as base
+        tmp=dic1
+        dic1=dic2
+        dic2=tmp 
+    dot_product=0
+    for docid,value in iteritems(dic1):
+        if dic2.has_key(docid):
+            dot_product+=value*dic2.get(docid)
+    return dot_product
+
+def _sparse_vec_sim(dic1,dic2):
+    if dic1.values() and dic2.values():
+        return _dot_product(dic1,dic2)/(norm(dic1.values())*norm(dic2.values()))
+    else:
+        return 0
 # rows=tablemerge.getTopRecords(dbconfig.mergetable, 10)
 # title=rows[3][2]
 # doc=delpunc(' '.join(jieba.cut(title)).lower())
@@ -113,8 +148,8 @@ def _get_concept_vec(wordList):
 corpus_esa=corpora.MmCorpus(esa_mm_file)
 
 def getSimNews(wordList):
-    vec_esa=_get_concept_vec(wordList)
-#     vec_esa=_get_concept_vec_prune(wordList)
+#     vec_esa=_get_concept_vec(wordList)
+    vec_esa=_get_concept_vec_prune(wordList)
 #     vec_esa=_get_concept_vec_slope(wordList)
     return index[vec_esa]
 
@@ -127,27 +162,39 @@ def printSimNewsByStr(wordList):
     corpus=list(open(news_file,'r'))
     for snum,sim in getSimNews(wordList):
         print sim,corpus[snum],
-        
-def getSimNewsId():
-    news_rep_pre_file='/home/dannl/tmp/newstech/db1/title_rep'
-    sim_mtid_file='/home/dannl/tmp/newstech/esa_sw/sim_mtid'
-    corpus=list(open(news_file,'r'))
-    rep_title=open(news_rep_pre_file,'r')
-    fout=open(sim_mtid_file,'w')
-    for line in rep_title:
-        lineno=int(line.split()[0])-1
-        for snum,sim in index[corpus_esa[lineno]]:
-            print >> fout,corpus[snum].split()[0],
-        print >>fout  
-        
+
+def getSimofNewsPrune(wordList1,wordList2):    
+    vec1=_get_concept_vec_prune(wordList1,0.2)
+    vec2=_get_concept_vec_prune(wordList2,0.2)
+    if len(vec1)>len(vec2):
+        tmp=vec1
+        vec1=vec2
+        vec2=tmp
+    if len(vec1)!=len(vec2) and len(vec1)==0:
+        return 0        
+    dic_vec2={}
+    for _id,value in vec2:
+        dic_vec2[_id]=value
+    dot_product=0
+    for _id,value in vec1:
+        if dic_vec2.has_key(_id):
+            dot_product+=dic_vec2[_id]*value            
+    vec1=np.array([i[1] for i in vec1])
+    vec2=np.array([i[1] for i in vec2])
+    return dot_product/(norm(vec1)*norm(vec2))
+
+def getSimofNews(wordList1,wordList2):    
+    dic_v1=_get_dic_vec(wordList1)
+    dic_v2=_get_dic_vec(wordList2)
+    return _sparse_vec_sim(dic_v1,dic_v2)
+    
+                
 if __name__=='__main__':    
     oldtime=time.time()
 #     printSimNews(28)
-    newStr='最高法：网购快递被冒领应由销售者赔偿 快递公司不担责'
-    wordList=delpunc(' '.join(jieba.cut(newStr.lower()))).split();    
-    printSimNewsByStr(wordList)
-#     wordList='揭秘 王卫 顺丰 快递 员 为啥 拼命 给 他 打天下'.decode('utf-8').split()
-#     for word in wordList:
-#         print word,dictionary.token2id[word],len(word2doc_mat[dictionary.token2id[word]])
-    getSimNewsId()
+    news1='在 游戏 开发 上 三大 vr 平台 各自 的 优势 是 什么'.split()
+    news2='三大 vr 平台 在 游戏 上 都 做 了 哪些 布局'.split()
+#     wordList=delpunc(' '.join(jieba.cut(news1.lower()))).split();    
+    printSimNewsByStr(news1)
+    print getSimofNewsPrune(news1,news2)
     print 'time cost:%s' % str(time.time()-oldtime)

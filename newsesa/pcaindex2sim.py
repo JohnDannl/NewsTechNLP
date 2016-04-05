@@ -8,14 +8,14 @@ Created on 2015-3-22
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import dict_file,word2docp_mm_file,word2docp2_mm_file,tfidf_md_file,news_file,index_file,esa_pca_md_file
+from config import dic_file,word2docp_mm_file,word2docp2_mm_file,tfidf_md_file,news_file,index_file,esa_pca_md_file
 
 import jieba
 from database import tablemerge,dbconfig
 from common.punckit import delpunc
 import time
 
-dictionary = corpora.Dictionary.load(dict_file)
+dictionary = corpora.Dictionary.load(dic_file)
 # print corpus # MmCorpus(3026 documents, 8950 features, 22702 non-zero entries)
 tfidf=models.TfidfModel.load(tfidf_md_file)
 # word2doc_mat=corpora.MmCorpus(word2docp_mm_file)    # `mm` document stream now has random access

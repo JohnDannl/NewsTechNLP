@@ -5,14 +5,10 @@ Created on 2015-7-16
 
 @author: dannl
 '''
-news_file='/home/dannl/tmp/newstech/news.txt'
-# use wiki dict
-# dict_file='/home/dannl/tmp/wiki/lsa/wiki.dic'
-# tfidf_md_file='/home/dannl/tmp/wiki/lsa/tfidf.md'
-
-# use news_wiki dict
-dict_file='/home/dannl/tmp/news/news_wiki/news_wiki.dic'
-tfidf_md_file='/home/dannl/tmp/news/news_wiki/tfidf.md'
+corpus_file=r'/home/dannl/tmp/newstech/news.txt'
+news_file='/home/dannl/tmp/newstech/data/merge1_title'
+dic_file='/home/dannl/tmp/newstech/lsa/news.dic'
+tfidf_md_file='/home/dannl/tmp/newstech/lsa/tfidf.md'
 
 lsa_mm_file='/home/dannl/tmp/newstech/lsa/lsa.mm'
 lsa_md_file='/home/dannl/tmp/newstech/lsa/lsa.md'

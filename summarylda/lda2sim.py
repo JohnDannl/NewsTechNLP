@@ -8,13 +8,13 @@ Created on 2015-8-26
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import news_file,dict_file,tfidf_md_file,corpus_lda_file,lda_md_file,index_file,index_prefix
+from config import news_file,dic_file,tfidf_md_file,corpus_lda_file,lda_md_file,index_file,index_prefix
 import time
 import jieba
 import copy
 from common.punckit import delpunc
 
-dictionary = corpora.Dictionary.load(dict_file)
+dictionary = corpora.Dictionary.load(dic_file)
 lda=models.LdaModel.load(lda_md_file)
 corpus_lda= corpora.MmCorpus(corpus_lda_file)
 index=similarities.Similarity.load(index_file)

@@ -8,13 +8,13 @@ Created on 2015-1-19
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
 from gensim import corpora,models,similarities
-from config import dict_file,tfidf_md_file,word2docp_mm_file,news_file,esa_mm_file
+from config import dic_file,tfidf_md_file,word2docp_mm_file,news_file,esa_mm_file
 from six import iteritems
 from numpy.linalg import norm
 import time
 oldtime=time.time()
 
-dictionary = corpora.Dictionary.load(dict_file)
+dictionary = corpora.Dictionary.load(dic_file)
 tfidf =models.TfidfModel.load(tfidf_md_file)
 word2doc_mat=corpora.MmCorpus(word2docp_mm_file)  
 # word2doc_mat=corpora.MmCorpus(word2docp2_mm_file)  
@@ -115,9 +115,9 @@ class MyCorpus(object):
     def __iter__(self):
         for line in open(self.__file_name):
             line=line.split()     
-            yield _get_concept_vec(line[1:])
+#             yield _get_concept_vec(line[1:])
             #yield _get_concept_vec_slope(line[1:])
-            #yield _get_concept_vec_prune(line[1:])
+            yield _get_concept_vec_prune(line[1:])
         
 corpora.MmCorpus.serialize(esa_mm_file, MyCorpus(news_file)) # store to disk, for later use
 
