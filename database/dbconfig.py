@@ -5,8 +5,8 @@ Created on 2014-5-3
 
 @author: JohnDannl
 '''
-dbname = 'newstech1'
-# dbname = 'newstech'
+# dbname = 'newstech1'
+dbname = 'newstech'
 user = 'postgres'
 
 host = 'localhost'
