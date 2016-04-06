@@ -24,7 +24,6 @@ dictionary = corpora.Dictionary.load(dic_file)
 tfidf=models.TfidfModel.load(tfidf_md_file)
 word2doc_mat=corpora.MmCorpus(word2docp_mm_file)    # `mm` document stream now has random access
 # word2doc_mat=corpora.MmCorpus(word2docp2_mm_file)    # for the first-order model
-index = similarities.Similarity.load(full_index_file)
 
 def _get_concept_vec_prune(wordList,prune_at=0.2):
     dic_tfidf={}
@@ -145,15 +144,16 @@ def _sparse_vec_sim(dic1,dic2):
 # for sim in sims:
 #     print sim[1],' '.join(doc_list[sim[0]].strip().split()[1:])
 
-corpus_esa=corpora.MmCorpus(esa_mm_file)
-
 def getSimNews(wordList):
+    index = similarities.Similarity.load(full_index_file)
 #     vec_esa=_get_concept_vec(wordList)
     vec_esa=_get_concept_vec_prune(wordList)
 #     vec_esa=_get_concept_vec_slope(wordList)
     return index[vec_esa]
 
 def printSimNews(num):
+    index = similarities.Similarity.load(full_index_file)
+    corpus_esa=corpora.MmCorpus(esa_mm_file)
     corpus=list(open(news_file,'r'))
     for snum,sim in index[corpus_esa[num]]:
         print sim,corpus[snum],

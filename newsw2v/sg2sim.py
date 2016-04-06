@@ -19,7 +19,6 @@ import time
 
 model = Word2Vec.load(sg_md_file)
 model.init_sims(replace=True)   # To save memory
-index = similarities.Similarity.load(sg_index_file)
 
 def _get_concept_vec(wordList):
     # wordList is a list of word:[word1,word2,...,wordn]
@@ -57,13 +56,14 @@ def _get_wl_vec(wordList):
 # for sim in sims:
 #     print sim[1],' '.join(doc_list[sim[0]].strip().split()[1:])
 
-corpus_w2v=corpora.MmCorpus(sg_mm_file)
-
 def getSimNews(wordList):
+    index = similarities.Similarity.load(sg_index_file)
     vec_w2v=_get_concept_vec(wordList)
     return index[vec_w2v]
 
 def printSimNews(num):
+    corpus_w2v=corpora.MmCorpus(sg_mm_file)
+    index = similarities.Similarity.load(sg_index_file)
     corpus=list(open(news_file,'r'))
     for snum,sim in index[corpus_w2v[num]]:
         print sim,corpus[snum],

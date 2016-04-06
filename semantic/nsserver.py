@@ -7,12 +7,13 @@ Created on 2016-4-5
 '''
 import logging
 logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',level=logging.INFO)
+import sys
+sys.path.append('..')
 import socket
 from config import host,port
 import threading
 import time
 import json
-
 from newsesa import esa2sim
 from newsw2v import sg2sim,cbow2sim
 
