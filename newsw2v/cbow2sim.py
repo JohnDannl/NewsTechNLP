@@ -64,8 +64,12 @@ def printSimNewsByWL(wordList):
 def getSimofNews(wordList1,wordList2):    
     vec1=_get_wl_vec(wordList1)
     vec2=_get_wl_vec(wordList2)
-    return np.dot(vec1,vec2)/(np.linalg.norm(vec1)*np.linalg.norm(vec2))
-    
+    nv1=np.linalg.norm(vec1)
+    nv2=np.linalg.norm(vec2)
+    if nv1!=0 and nv2!=0:
+        return np.dot(vec1,vec2)/(nv1*nv2)
+    else:
+        return 0
           
 if __name__=='__main__':
     oldtime=time.time()

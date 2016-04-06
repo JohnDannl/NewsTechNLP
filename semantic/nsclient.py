@@ -6,13 +6,16 @@ Created on 2016-4-5
 @author: dannl
 '''
 import socket
-from config import host,port
+# from config import host,port
 import json
+
+host='222.195.78.189'
+port=8893
 
 def getSimofNews(wordStr): 
     # wordStr is a string joined by ';;' with two word list split with space,encoded in utf-8 or unicode
     rec_buffer=[]    
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
     try:
         s.connect((host, port))    
         if isinstance(wordStr, unicode):
@@ -33,7 +36,7 @@ def getSimofNews(wordStr):
     return sims
 
 if __name__=='__main__':
-    news1='在 游戏 开发 上 三大 vr 平台 各自 的 优势 是 什么'
-    news2='三大 vr 平台 在 游戏 上 都 做 了 哪些 布局'
+    news1='这次 是 真的 日媒 称鸿海 或 3 月 9 日 宣布 收购 夏普'
+    news2='一波三折 鸿海 或 3 月 9 日 宣布 收购 夏普'
     newstr=';;'.join([news1,news2])
     print getSimofNews(newstr)
