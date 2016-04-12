@@ -14,8 +14,9 @@ from config import host,port
 import threading
 import time
 import json
-from newsesa import esa2sim
-from newsw2v import sg2sim,cbow2sim
+# from newsesa import esa2sim
+# from newsw2v import cbow2sim
+from newsw2v import sg2sim
 
 def server_listen():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -34,10 +35,11 @@ def process_query(sock,addr):
     news1,news2=data.split(';;')
     wordlist1=news1.split()
     wordlist2=news2.split()
-    esa_sim=esa2sim.getSimofNews(wordlist1,wordlist2)
+#     esa_sim=esa2sim.getSimofNews(wordlist1,wordlist2)
     sg_sim=sg2sim.getSimofNews(wordlist1,wordlist2)
-    cbow_sim=cbow2sim.getSimofNews(wordlist1,wordlist2)    
-    sims={'esa':esa_sim,'sg':sg_sim,'cbow':cbow_sim}
+#     cbow_sim=cbow2sim.getSimofNews(wordlist1,wordlist2)    
+#     sims={'esa':esa_sim,'sg':sg_sim,'cbow':cbow_sim}
+    sims={'sg':sg_sim}
     resultStr= json.dumps(sims)    
     #print 'reply:',resultStr
     sock.sendall(resultStr)

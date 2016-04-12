@@ -52,8 +52,7 @@ def getTimeSpan():
     print max_time
     print time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(min_time)),'~',\
     time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(max_time))
-               
-        
+           
 def getMerge2Title():
     rows=tablemerge2.getTitleSummary(dbconfig.mergetable2)
     if rows !=-1:
@@ -110,9 +109,10 @@ def getMergeNews():
                 #timeStr=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(ctime))
                 msg_ts='%s %s %s'%(count,title,summary)                
                 fout.write(msg_ts+'\n')   
-                
+
 if __name__=='__main__':
-    getTimeSpan()
+    print time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(1449799226))
+#     getTimeSpan()
 #     getMergeNews()
 #     getMergeTitle()
 #     getMerge2Title()

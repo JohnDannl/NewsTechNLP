@@ -91,6 +91,6 @@ if __name__=='__main__':
 #     getFirstRmDuplicationResult(True)
 #     getSecondRmDuplicationResult(True)
 #     getSecondRmDuplicationResult(False)
-#     getDuplicationRate()
-    getRep()
+    getDuplicationRate()
+#     getRep()
         
