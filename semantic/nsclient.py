@@ -36,7 +36,9 @@ def getSimofNews(wordStr):
     return sims
 
 if __name__=='__main__':
-    news1='这次 是 真的 日媒 称鸿海 或 3 月 9 日 宣布 收购 夏普'
-    news2='一波三折 鸿海 或 3 月 9 日 宣布 收购 夏普'
+#     news1='这次 是 真的 日媒 称鸿海 或 3 月 9 日 宣布 收购 夏普'
+#     news2='一波三折 鸿海 或 3 月 9 日 宣布 收购 夏普'
+    news1=''
+    news2=''
     newstr=';;'.join([news1,news2])
     print getSimofNews(newstr)

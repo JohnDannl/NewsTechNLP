@@ -2,7 +2,7 @@
 #_*_ coding:utf-8 _*_
 
 import re
-import urllib2
+import urllib2,urllib
 import os
 import hashlib
 import time
@@ -43,6 +43,20 @@ def cost_log(func):
         return web,num
     return wrapper
 
+def postHtml(url,data):
+    cookiejar = cookielib.CookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
+    postData = urllib.urlencode(data)
+    r=urllib2.Request(url)
+    r.add_header("Accept-Language","zh-cn,en-us;q=0.7,en;q=0.3")
+    r.add_header("User-Agent","Mozilla/5.0 (Windows NT 6.2; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
+    try:
+        content=opener.open(r,postData,timeout=TIMEOUT_IN_SECONDS).read()
+        time.sleep(0.3)
+        return content
+    except:
+        return None
+    
 def getHtml(url): 
     r=urllib2.Request(url)
     r.add_header("Accept-Language","zh-cn,en-us;q=0.7,en;q=0.3")

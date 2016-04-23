@@ -7,6 +7,8 @@ Created on 2014-12-27
 '''
 
 # w2v_md_file=r'/home/dannl/tmp/wiki/w2v/w2v.md'
+dict_file=r'/home/dannl/tmp/wiki/esa/wiki.dic'
+tfidf_md_file=r'/home/dannl/tmp/wiki/esa/tfidf.md'
 
 sg_md_file=r'/home/dannl/tmp/wiki/w2v/sg.md'
 cbow_md_file=r'/home/dannl/tmp/wiki/w2v/cbow.md'
